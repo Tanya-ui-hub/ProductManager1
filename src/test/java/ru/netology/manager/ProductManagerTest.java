@@ -48,6 +48,64 @@ public class ProductManagerTest {
         assertArrayEquals(expected, actual);
 
     }
+
+    @Test
+    void whenManagerIsEmpty()
+    {
+        ProductManager emptyManager = new ProductManager(repository);
+
+        Product[] returned = new Product[]{};
+        doReturn(returned).when(repository).findAll();
+
+        Product[] expected = new Product[]{};
+        Product[] actual = emptyManager.searchBy("some product");
+
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void whenManagerHaveOneProductAndSearchingNotExistsProduct()
+    {
+        ProductManager emptyManager = new ProductManager(repository);
+        emptyManager.add(first);
+
+        Product[] returned = new Product[]{first};
+        doReturn(returned).when(repository).findAll();
+
+        Product[] expected = new Product[]{};
+        Product[] actual = manager.searchBy("not existing title");
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void whenHaveOneProductAndWeSearchIt()
+    {
+        ProductManager emptyManager = new ProductManager(repository);
+        emptyManager.add(first);
+
+        Product[] returned = new Product[]{first};
+        doReturn(returned).when(repository).findAll();
+
+        Product[] expected = new Product[]{first};
+        Product[] actual = manager.searchBy("Lermontov");
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void whenManagerHaveFewProductsAndSearchingOneOfThem()
+    {
+        ProductManager emptyManager = new ProductManager(repository);
+        emptyManager.add(first);
+        emptyManager.add(second);
+
+        Product[] returned = new Product[]{first, second};
+        doReturn(returned).when(repository).findAll();
+
+        Product[] expected = new Product[]{second};
+        Product[] actual = manager.searchBy("Pushkin");
+        assertArrayEquals(expected, actual);
+    }
+
     @Test
     void shouldSearchByBookAuthor() {
         Product[] returned = new Product[]{first, second, third, fourth};
